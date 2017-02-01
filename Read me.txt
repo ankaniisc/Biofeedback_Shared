@@ -1,0 +1,9 @@
+\\ General Information about the folder:
+     This folder contains the GUI needed for the Biofeedback Experiment.
+All the necessary functions and the files for running the GUI is also included in the folder, making this a independent folder which can run on itself.
+Only thing which need to be added to the path is the EEGLab
+
+\\ Instructions: 
+     Please make the folder as pwd to proceed.
+
+\\ Created at 30 Jan' 17
