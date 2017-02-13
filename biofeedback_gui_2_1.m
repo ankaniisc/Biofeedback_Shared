@@ -1,9 +1,9 @@
 
-%% The main programme for the GUI and the controls
+% The subprogramme for the biofeedback_gui_2 to get the getrawdata right
 
-function biofeedback_gui_1
+function biofeedback_gui_2
 
-%% Creating a figure to house the GUI
+% Creating a figure to house the GUI
 figure
 
 % Defining basic positions
@@ -68,7 +68,7 @@ hTF         =  plotHandles(2,1);
 
 drawnow; 
 
-%% initializing the parameters for the main programme
+% initializing the parameters for the main programme
 
 state = 0; % by default state is zero which would be updated according to the case
 Fs = 500;
@@ -83,56 +83,56 @@ AlphaMin = get(hAlphaMin,'String');
 
 while 1
     
-     % Collect data for 1 second    
+%   Collect data for 1 second    
     
-    getRawData(AlphaChans); % function for aquiring one second of data
+    getBRawData(AlphaChans); % function for aquiring one second of data
     
-    % Get alpha Range
-    % Do time-frequency analysis to get PSD
-    % AB: Everything above can be done in a single function instead of
-    % passing the data from one to another. Get the data and get the psd
-    % also, but dont plot
+%     Get alpha Range
+%     Do time-frequency analysis to get PSD
+%     AB: Everything above can be done in a single function instead of
+%     passing the data from one to another. Get the data and get the psd
+%     also, but dont plot
     
     if state == 0 % Idle state
         timeStartS=0;
         pause(1);
     elseif state == 1 % Start
-        % Display PSD and T-F plot
+        Display PSD and T-F plot
         timeToUse = timeStartS + timeValsS;
         timeStartS=timeStartS+sampleDurationS;
         if timeStartS==fullDisplayDurationS
             timeStartS=0;
             cla(tfPlot);
         end
-        displayTFandPSDs(timeToUse,psd);
+        displayTFandPSDs(timeToUse,psd); 
         pause(1);
     elseif state == 2 % Stop
         timeStartS=0;
         pause(1);
         
-    elseif state == 3 % Calibrate
-        if timeStartS<calibrationDurationS
-        % Display PSD and T-F plot as before
-        % Save PSD data in a larger array
-        % compute alpha power
-        
-        elseif timeStartS==calibrationDurationS
-            % compute the baseline values
-            % display baseline in a separate
-            % Save the entire calibarion data in a separate file
-            timeStartS=timeStartS+sampleDurationS;
-        end
-        pause(1);
-    elseif state == 4 % run Experiment
-        disp('positive four');
-        pause(1);
+%     elseif state == 3 % Calibrate
+%         if timeStartS<calibrationDurationS
+%         % Display PSD and T-F plot as before
+%         % Save PSD data in a larger array
+%         % compute alpha power
+%         
+%         elseif timeStartS==calibrationDurationS
+%             % compute the baseline values
+%             % display baseline in a separate
+%             % Save the entire calibarion data in a separate file
+%             timeStartS=timeStartS+sampleDurationS;
+%         end
+%         pause(1);
+%     elseif state == 4 % run Experiment
+%         disp('positive four');
+%         pause(1);
     elseif state == 5 % Exit the Experiment
         break
     end
 end
  
 
-%% Callback functions
+% Callback functions
 
     function Callback_Start(~,~)
         state = 1;

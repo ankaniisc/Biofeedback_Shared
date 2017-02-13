@@ -5,9 +5,10 @@
 
 % Please add to the path common program before executing the function
 
-function getBRawDataf(AlphaChans) % calling the with the alphachans no
+function getBRawData(AlphaChans) % calling the with the alphachans no
 
     %% Creating the cfg structure in which host and port name is specified
+    pnet('closeall') % closing all the previously opens pnets connections
 
     cfg.host=getIPv4Address;
     cfg.port=(51244);
@@ -95,7 +96,7 @@ function getBRawDataf(AlphaChans) % calling the with the alphachans no
 
     % Initializing paramneter for the while condition
     col = 0;
-    
+    X = [];
     while (col < Fs)
     % read the message header
         msg       = [];
@@ -139,9 +140,9 @@ function getBRawDataf(AlphaChans) % calling the with the alphachans no
                     msg.Markers(i).sTypeDesc  = tcpread_new(sock, char(0), 'char',0);
                 end
 
-%             case 3
-%                 % acquisition has stopped
-%                 break
+            case 3
+                % acquisition has stopped
+                break
 
             otherwise
                 % ignore all other message types
@@ -184,13 +185,16 @@ function getBRawDataf(AlphaChans) % calling the with the alphachans no
                 gain = single(hdr.resolutions');
                 gain = repmat(gain,1,size(nextdat,2));
                 nextdat = nextdat.*gain; % 
-                nextdat=nextdat(AlphaChans,:);
+%                 nextdat=nextdat(AlphaChans,:);
 %                 rawdata = [rawdata nextdat]; commenting the rawdata               
                  % AB: x can be restored into the initial point where the dat will be stored once more
-               [power(count,:,:),freq] = mtspectrumc(nextdat',params);  
-                X=[];
+%                [power(count,:,:),freq] = mtspectrumc(nextdat',params);  
+               [power,freq] = mtspectrumc(nextdat',params);  
+%                 X=[];
                   
              end
         end
-    end
+    end 
+    pnet(sock,'close'); % Closing the port after the analysis is done
+
 end
