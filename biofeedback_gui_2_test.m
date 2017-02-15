@@ -1,5 +1,8 @@
 
-% The subprogramme for the biofeedback_gui_2 to get the getrawdata right
+% The subprogramme for the biofeedback_gui_1 to make the first two controls start and stop right
+% Validated that pause after each callback fucntion or where it is being
+% called is working
+% AB: 14th Feb, 3:15 PM
 
 function biofeedback_gui_2
 
@@ -62,11 +65,11 @@ plot_delX = 1-ystart*4; plot_delY = 1-ystart*3;
 plotPos     =   [plot_xstart,plot_ystart,plot_delX,plot_delY];
 plotHandles =   getPlotHandles(2,1,plotPos,0.06,0.05,0); 
 
-Getting plot handles
+% Getting plot handles
 hRawTrace   =  plotHandles(1,1);
 hTF         =  plotHandles(2,1);
 
-drawnow; 
+% drawnow; 
 
 % initializing the parameters for the main programme
 
@@ -77,15 +80,15 @@ timeValsS = 0:1/Fs:sampleDurationS-1/Fs;
 timeStartS = 0;
 fullDisplayDurationS = 60;
 trialNumber = 1;
-Initializing the default variables 
+% Initializing the default variables 
 AlphaChans = [1 2 3 4 5];  % The chaneels from which the data is extracted
 AlphaMin = get(hAlphaMin,'String');
 
 while 1
     
-%   Collect data for 1 second    
+%      Collect data for 1 second    
     
-    getRawData(AlphaChans); % function for aquiring one second of data
+%     getRawData(AlphaChans); % function for aquiring one second of data
     
 %     Get alpha Range
 %     Do time-frequency analysis to get PSD
@@ -94,23 +97,26 @@ while 1
 %     also, but dont plot
     
     if state == 0 % Idle state
-        timeStartS=0;
+%         timeStartS=0;
+        disp('positive zero');
         pause(1);
     elseif state == 1 % Start
-        Display PSD and T-F plot
-        timeToUse = timeStartS + timeValsS;
-        timeStartS=timeStartS+sampleDurationS;
-        if timeStartS==fullDisplayDurationS
-            timeStartS=0;
-            cla(tfPlot);
-        end
-        displayTFandPSDs(timeToUse,psd); 
+          disp('positive one');
+%         Display PSD and T-F plot
+%         timeToUse = timeStartS + timeValsS;
+%         timeStartS=timeStartS+sampleDurationS;
+%         if timeStartS==fullDisplayDurationS
+%             timeStartS=0;
+%             cla(tfPlot);
+%         end
+%         displayTFandPSDs(timeToUse,psd); 
         pause(1);
     elseif state == 2 % Stop
         timeStartS=0;
         pause(1);
         
-%     elseif state == 3 % Calibrate
+    elseif state == 3 % Calibrate
+        disp('positive three');
 %         if timeStartS<calibrationDurationS
 %         % Display PSD and T-F plot as before
 %         % Save PSD data in a larger array
@@ -122,10 +128,10 @@ while 1
 %             % Save the entire calibarion data in a separate file
 %             timeStartS=timeStartS+sampleDurationS;
 %         end
-%         pause(1);
-%     elseif state == 4 % run Experiment
-%         disp('positive four');
-%         pause(1);
+        pause(1);
+    elseif state == 4 % run Experiment
+        disp('positive four');
+        pause(1);
     elseif state == 5 % Exit the Experiment
         break
     end

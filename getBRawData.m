@@ -5,7 +5,16 @@
 
 % Please add to the path common program before executing the function
 
-function getBRawData(AlphaChans) % calling the with the alphachans no
+% Defining inputs and outputs:
+
+% Inputs:
+    %       alphachans
+% Outputs:  (each seconds of the data)
+    %       nextdat 
+    %       power
+    %       freq
+    
+function raw = getBRawData(AlphaChans) % calling the with the alphachans no
 
     %% Creating the cfg structure in which host and port name is specified
     pnet('closeall') % closing all the previously opens pnets connections
@@ -189,12 +198,22 @@ function getBRawData(AlphaChans) % calling the with the alphachans no
 %                 rawdata = [rawdata nextdat]; commenting the rawdata               
                  % AB: x can be restored into the initial point where the dat will be stored once more
 %                [power(count,:,:),freq] = mtspectrumc(nextdat',params);  
-               [power,freq] = mtspectrumc(nextdat',params);  
+               [power,freq] = mtspectrumc(nextdat',params);
+               meanRawPower = mean(power,2);
 %                 X=[];
-                  
+                
+                 
              end
         end
     end 
-    pnet(sock,'close'); % Closing the port after the analysis is done
-
+    
+    % Closing the port when exverything is done
+    pnet(sock,'close'); % Closing the port after one second data has been aquired
+    
+    % Creating a structure where the datas would be kept upon
+    % Its like a packet which would be opended in anotehr fucntion
+    raw.data = nextdat;
+    raw.power = power;
+    raw.freq = freq;
+    raw.meanRawPower = meanRawPower;
 end
