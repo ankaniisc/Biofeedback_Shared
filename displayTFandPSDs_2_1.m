@@ -2,7 +2,7 @@
 % The aim of the programme is by getting the timetouse and rawdata and the
 % calculated power data, plot all the necessary plots
 
-function displayTFandPSDs(timeToUse,raw,handles)
+function displayTFandPSDs_2_1(timeToUse,raw,powerTemp,handles)
 
     t = timeToUse;
     % unpacking the rawtrace and tf from the handles
@@ -32,18 +32,23 @@ function displayTFandPSDs(timeToUse,raw,handles)
     % tfplot
     % right now just do the tf plot
     axes(hTF);
-    t = 
-%     pcolor(t, rawfreq, 10*double(dPower(1:size(dPower,1),:)'));
+    t = 1:5;
+%     y = size(rawfreq,2);
+%     powerF;
+    
+    pcolor(1:size(powerTemp,2), rawFreq, powerTemp);
+%     caxis([0 10]);
 %     hold on;
-    % colormap jet; shading interp;
+    colormap jet; shading interp;
+    hold(hTF,'on');
     % plot(1:size(dPower,1),alphaUpperLimit,'k'); hold on;
     % plot(1:size(dPower,1),alphaLowerLimit,'k'); hold off;
     % shading interp;
-    % title('Time Frequency Plot')
-    % xlabel(handles.tfAlpha, 'Time (s)'); ylabel(handles.tfAlpha, 'Frequency');
-    % caxis(handles.tfAlpha,[-10 10]);
-    % xlim(handles.tfAlpha,[1 totPass+BLPeriod]);
-    % ylim(handles.tfAlpha, [0 Fs/10]); 
+    title('Time Frequency Plot')
+    xlabel(handles.hTF, 'Time (s)'); ylabel(handles.hTF, 'Frequency');
+%     caxis(handles.hTF,[-10 10]);
+    xlim(handles.hTF,[1 fullDisplayDurationS]);
+    ylim(handles.hTF, [0 51]); 
 
     drawnow;
 

@@ -8,7 +8,7 @@
 
 % Subgoal is to get the 'start' right
 
-function biofeedback_gui_2
+function biofeedback_gui_2_4
 
     % Creating a figure to house the GUI
     figure
@@ -135,7 +135,7 @@ function biofeedback_gui_2
             
             powerTemp(:,timeStartS) = raw.meanRawPower;   
             
-            displayTFandPSDs_2_1(timeToUse,raw,powerTemp,handles); 
+            displayTFandPSDs(timeToUse,raw,powerTemp,handles); 
             
             if timeStartS==fullDisplayDurationS
                 timeStartS=0;

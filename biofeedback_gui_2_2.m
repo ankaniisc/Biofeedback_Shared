@@ -1,4 +1,8 @@
 
+% keeping a varibale count and using imagesc plot.
+% important: this function calls the displayTFandPSDs_1.m for the ploting
+% relevant graphs
+
 % The subprogramme for the biofeedback_gui_2 to get the getrawdata right
 % Update on 14th feb: AB: the get raw data is now correctly aquiring the
 % data and calculating the powers in each frequency band
@@ -90,7 +94,7 @@ function biofeedback_gui_2
     sampleDurationS = 1;
     timeValsS = 0:1/Fs:sampleDurationS-1/Fs;
     timeStartS = 0;
-    fullDisplayDurationS = 50;
+    fullDisplayDurationS = 10;
 
     handles.fullDisplayDurationS = fullDisplayDurationS;
 
@@ -116,7 +120,7 @@ function biofeedback_gui_2
 
         if state == 0 % Idle state
             timeStartS=0;
-            powerTemp = zeros(size(raw.power,1),fullDisplayDurationS);
+% %             powerTemp = zeros(size(raw.power,1),fullDisplayDurationS);
     %         pause(1);
 
         elseif state == 1 % Start
@@ -134,19 +138,21 @@ function biofeedback_gui_2
 
             
             powerTemp(:,timeStartS) = raw.meanRawPower;   
-            
-            displayTFandPSDs_2_1(timeToUse,raw,powerTemp,handles); 
+            raw.powerTemp = powerTemp;
+            displayTFandPSDs_2_2(timeToUse,timeStartS,raw,handles); 
             
             if timeStartS==fullDisplayDurationS
                 timeStartS=0;
                 cla(hRawTrace);
+                cla(hTF);
                 powerTemp = zeros(size(raw.power,1),fullDisplayDurationS);
             end   
         elseif state == 2 % Stop
             timeStartS=0;
             cla(hRawTrace);
             cla(hTF);
-            powerTemp = zeros(51,fullDisplayDurationS);
+            powerTemp = zeros(size(raw.power,1),fullDisplayDurationS);
+%             powerTemp = zeros(51,fullDisplayDurationS);
     %         pause(1);
 
     %     elseif state == 3 % Calibrate

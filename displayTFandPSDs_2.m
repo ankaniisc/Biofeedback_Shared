@@ -2,7 +2,7 @@
 % The aim of the programme is by getting the timetouse and rawdata and the
 % calculated power data, plot all the necessary plots
 
-function displayTFandPSDs(timeToUse,raw,powerTemp,handles)
+function displayTFandPSDs_2(timeToUse,raw,powerTemp,handles)
 
     t = timeToUse;
     % unpacking the rawtrace and tf from the handles
@@ -36,8 +36,7 @@ function displayTFandPSDs(timeToUse,raw,powerTemp,handles)
 %     y = size(rawfreq,2);
 %     powerF;
     
-    pcolor(1:size(powerTemp,2), rawFreq, powerTemp),colorbar;
-%     caxis([0 10]);
+    pcolor(1:size(powerTemp,2), rawFreq, powerTemp);
 %     hold on;
     colormap jet; shading interp;
     hold(hTF,'on');
