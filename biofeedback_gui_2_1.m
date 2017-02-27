@@ -90,7 +90,7 @@ function biofeedback_gui_2
     sampleDurationS = 1;
     timeValsS = 0:1/Fs:sampleDurationS-1/Fs;
     timeStartS = 0;
-    fullDisplayDurationS = 50;
+    fullDisplayDurationS = 10;
 
     handles.fullDisplayDurationS = fullDisplayDurationS;
 

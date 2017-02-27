@@ -2,7 +2,7 @@
 % The aim of the programme is by getting the timetouse and rawdata and the
 % calculated power data, plot all the necessary plots
 
-function displayTFandPSDs_2_2(timeToUse,timeStartS,raw,handles)
+function displayTFandPSDs_2_3(timeToUse,timeStartS,raw,handles)
 
     t = timeToUse;
     count = timeStartS;
@@ -22,6 +22,7 @@ function displayTFandPSDs_2_2(timeToUse,timeStartS,raw,handles)
     meanRawPower = meanRawPower(:,any(meanRawPower));
     powertoplot = meanRawPower; 
     
+    chan1RawData = rawdata(1,:);
     % Now we have the data, time, and the figure handle. Basically everything
     % we need. Now just plot.
 
@@ -29,8 +30,8 @@ function displayTFandPSDs_2_2(timeToUse,timeStartS,raw,handles)
     
     % rawtrace
     axes(hRawTrace);
-
-    plot(t,meanRawdataAlChan,'k'); 
+    plot(t,chan1RawData,'k');
+%     plot(t,meanRawdataAlChan,'k'); 
     xlim([0 fullDisplayDurationS]);
     hold(hRawTrace,'on');
 

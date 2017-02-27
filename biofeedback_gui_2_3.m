@@ -1,7 +1,7 @@
 
 % keeping a varibale count and using imagesc plot.
 % important: this function calls the displayTFandPSDs_1.m for the ploting
-% relevant graphs
+% relevant graphs:
 
 % The subprogramme for the biofeedback_gui_2 to get the getrawdata right
 % Update on 14th feb: AB: the get raw data is now correctly aquiring the
@@ -94,11 +94,11 @@ function biofeedback_gui_2
     sampleDurationS = 1;
     timeValsS = 0:1/Fs:sampleDurationS-1/Fs;
     timeStartS = 0;
-    fullDisplayDurationS = 10;
+    fullDisplayDurationS = 5;
 
     handles.fullDisplayDurationS = fullDisplayDurationS;
 
-    trialNumber = 1;
+%     trialNumber = 1;
     % Initializing the default variables 
     AlphaChans = [1 2 3 4 5];  % The chaneels from which the data is extracted
     AlphaMin = get(hAlphaMin,'String'); % Right now unused
@@ -148,6 +148,7 @@ function biofeedback_gui_2
                 powerTemp = zeros(size(raw.power,1),fullDisplayDurationS);
             end   
         elseif state == 2 % Stop
+            pause;
             timeStartS=0;
             cla(hRawTrace);
             cla(hTF);

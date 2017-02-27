@@ -1,25 +1,13 @@
 
-%% The aim of this
-% Function for getting one second of the data and also to
-% calculate the power in each frequencies using mtspectrumc
-
-% Please add to the path common program before executing the function
-
-% Defining inputs and outputs:
-
-% Inputs:
-    %       alphachans
-% Outputs:  (each seconds of the data)
-    %       nextdat 
-    %       power
-    %       freq
+%% Troubleshooting the only getrawdata code
     
-function raw = getBRawData(AlphaChans) % calling the with the alphachans no
+function data = getBRawData_troubleshooting_2() % calling the with the alphachans no
 
     %% Creating the cfg structure in which host and port name is specified
 %     pnet('closeall') % closing all the previously opens pnets connections
 
 %     cfg.host=getIPv4Address;
+%     cfg.host = '10.120.10.137';
     cfg.host = '127.0.0.1';
     cfg.port=(51244);
 
@@ -116,22 +104,22 @@ function raw = getBRawData(AlphaChans) % calling the with the alphachans no
 
         % read the message body
         switch msg.nType
-            case 2
-                % this is a 16 bit integer data block
-                msg.nChannels     = hdr.orig.nChannels;
-                msg.nBlocks       = tcpread_new(sock, 1, 'int32',0);
-                msg.nPoints       = tcpread_new(sock, 1, 'int32',0);
-                %msg.nPoints       =hdr.Fs;
-                msg.nMarkers      = tcpread_new(sock, 1, 'int32',0);
-                msg.nData         = tcpread_new(sock, [msg.nChannels msg.nPoints], 'int16',0);
-                for i=1:msg.nMarkers
-                    msg.Markers(i).nSize      = tcpread_new(sock, 1, 'int32',0);
-                    msg.Markers(i).nPosition  = tcpread_new(sock, 1, 'int32',0);
-                    msg.Markers(i).nPoints    = tcpread_new(sock, 1, 'int32',0);
-                    % msg.Markers(i).nPoints    =hdr.Fs;
-                    msg.Markers(i).nChannel   = tcpread_new(sock, 1, 'int32',0);
-                    msg.Markers(i).sTypeDesc  = tcpread_new(sock, char(0), 'char',0);
-                end
+%             case 2
+%                 % this is a 16 bit integer data block
+%                 msg.nChannels     = hdr.orig.nChannels;
+%                 msg.nBlocks       = tcpread_new(sock, 1, 'int32',0);
+%                 msg.nPoints       = tcpread_new(sock, 1, 'int32',0);
+%                 %msg.nPoints       =hdr.Fs;
+%                 msg.nMarkers      = tcpread_new(sock, 1, 'int32',0);
+%                 msg.nData         = tcpread_new(sock, [msg.nChannels msg.nPoints], 'int16',0);
+%                 for i=1:msg.nMarkers
+%                     msg.Markers(i).nSize      = tcpread_new(sock, 1, 'int32',0);
+%                     msg.Markers(i).nPosition  = tcpread_new(sock, 1, 'int32',0);
+%                     msg.Markers(i).nPoints    = tcpread_new(sock, 1, 'int32',0);
+%                     % msg.Markers(i).nPoints    =hdr.Fs;
+%                     msg.Markers(i).nChannel   = tcpread_new(sock, 1, 'int32',0);
+%                     msg.Markers(i).sTypeDesc  = tcpread_new(sock, char(0), 'char',0);
+%                 end
 
             case 4
                 % this is a 32 bit floating point data block
@@ -141,14 +129,14 @@ function raw = getBRawData(AlphaChans) % calling the with the alphachans no
                 % msg.nPoints       =hdr.Fs;
                 msg.nMarkers      = tcpread_new(sock, 1, 'int32',0);
                 msg.fData         = tcpread_new(sock, [msg.nChannels msg.nPoints], 'single',0);
-                for i=1:msg.nMarkers
-                    msg.Markers(i).nSize      = tcpread_new(sock, 1, 'int32',0);
-                    msg.Markers(i).nPosition  = tcpread_new(sock, 1, 'int32',0);
-                    msg.Markers(i).nPoints    = tcpread_new(sock, 1, 'int32',0);
-                    %msg.Markers(i).nPoints   =hdr.Fs;
-                    msg.Markers(i).nChannel   = tcpread_new(sock, 1, 'int32',0);
-                    msg.Markers(i).sTypeDesc  = tcpread_new(sock, char(0), 'char',0);
-                end
+%                 for i=1:msg.nMarkers
+%                     msg.Markers(i).nSize      = tcpread_new(sock, 1, 'int32',0);
+%                     msg.Markers(i).nPosition  = tcpread_new(sock, 1, 'int32',0);
+%                     msg.Markers(i).nPoints    = tcpread_new(sock, 1, 'int32',0);
+%                     %msg.Markers(i).nPoints   =hdr.Fs;
+%                     msg.Markers(i).nChannel   = tcpread_new(sock, 1, 'int32',0);
+%                     msg.Markers(i).sTypeDesc  = tcpread_new(sock, char(0), 'char',0);
+%                 end
 
             case 3
                 % acquisition has stopped
@@ -171,9 +159,9 @@ function raw = getBRawData(AlphaChans) % calling the with the alphachans no
             dat = msg.fData(chanindx,:);
         end
 
-        if (msg.nType==2 || msg.nType==4) && msg.nMarkers>0
-            % FIXME convert the message to events
-        end
+%         if (msg.nType==2 || msg.nType==4) && msg.nMarkers>0
+%             % FIXME convert the message to events
+%         end
 
         if ~isempty(dat)
             X = [X dat];  
@@ -199,8 +187,8 @@ function raw = getBRawData(AlphaChans) % calling the with the alphachans no
 %                 rawdata = [rawdata nextdat]; commenting the rawdata               
                  % AB: x can be restored into the initial point where the dat will be stored once more
 %                [power(count,:,:),freq] = mtspectrumc(nextdat',params);  
-               [power,freq] = mtspectrumc(nextdat',params);
-               meanRawPower = mean(power,2);
+%                 [power,freq] = mtspectrumc(nextdat',params);
+%                  meanRawPower = mean(power,2);
 %                 X=[];
                 
                  
@@ -213,8 +201,8 @@ function raw = getBRawData(AlphaChans) % calling the with the alphachans no
     
     % Creating a structure where the datas would be kept upon
     % Its like a packet which would be opended in anotehr fucntion
-    raw.data = nextdat;
-    raw.power = power;
-    raw.freq = freq;
-    raw.meanRawPower = meanRawPower;
+    data = double(nextdat);
+%     raw.power = power;
+%     raw.freq = freq;
+%     raw.meanRawPower = meanRawPower;
 end

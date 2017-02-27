@@ -53,7 +53,7 @@ function displayTFandPSDs_2_2(timeToUse,timeStartS,raw,handles)
     title('Time Frequency Plot')
     xlabel(handles.hTF, 'Time (s)'); ylabel(handles.hTF, 'Frequency');
 %     caxis(handles.hTF,[-10 10]);
-    xlim(handles.hTF,[1 fullDisplayDurationS]);
+    xlim(handles.hTF,[0 fullDisplayDurationS]);
 %     ylim(handles.hTF, [0 51]); 
 
     drawnow;

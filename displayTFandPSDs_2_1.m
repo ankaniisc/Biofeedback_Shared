@@ -17,6 +17,8 @@ function displayTFandPSDs_2_1(timeToUse,raw,powerTemp,handles)
     rawFreq  = raw.freq;
     meanRawdataAlChan = mean(rawdata);
     meanRawPower = mean(rawPower,2);
+    
+    chan1Rawpower = rawdata(1,:);
     % Now we have the data, time, and the figure handle. Basically everything
     % we need. Now just plot.
 
@@ -24,7 +26,8 @@ function displayTFandPSDs_2_1(timeToUse,raw,powerTemp,handles)
     
     % rawtrace
     axes(hRawTrace);
-
+%     plot(t,chan1Rawpower,'k');
+    
     plot(t,meanRawdataAlChan,'k'); 
     xlim([0 fullDisplayDurationS]);
     hold(hRawTrace,'on');
