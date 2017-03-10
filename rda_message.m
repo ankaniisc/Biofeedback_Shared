@@ -67,6 +67,7 @@ function [raw,SQN] = rda_message(sock,hdr)
      meanRawPower = mean(power,2);
      raw.data = X;
      raw.meanPower = meanRawPower;
+%      raw.meanPower = conv2Log(meanRawPower);
      raw.freq = freq;
 %      raw.power = power;
 end

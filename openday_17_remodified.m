@@ -17,10 +17,12 @@ function openday_17
                 'String','Alpha Range');
 
     hAlphaMin = uicontrol('style','edit',...
+                        'String','8',...
                         'Unit','Normalized',...
                         'Position', [xstart   yini-gap   boxwidth   boxwidth]);
 
     hAlphaMax = uicontrol('style','edit',...
+                        'String','13',...
                         'Unit','Normalized',...
                         'Position', [xstart+(boxwidth)  yini-gap   boxwidth  boxwidth]);                
 
@@ -59,19 +61,21 @@ function openday_17
     plot_delX = 1-ystart*4; plot_delY = 1-ystart*3;
 
     plotPos     =   [plot_xstart,plot_ystart,plot_delX,plot_delY];
-    plotHandles =   getPlotHandles(2,1,plotPos,0.06,0.05,0); 
+    plotHandles =   getPlotHandles(3,1,plotPos,0.06,0.05,0); 
 
     % Getting plot handles
     hRawTrace   =  plotHandles(1,1);
-    hTF         =  plotHandles(2,1);
+    hRawTrace_2  =  plotHandles(2,1);
+    hTF         =  plotHandles(3,1);
 
     % Creating a single handle structure which would contain both the rawtrace
     % and tf handles
 
     %?? Hopefully the handles becomes the global variables
 
-    handles.hRawTrace = hRawTrace;
-    handles.hTF       = hTF;
+    handles.hRawTrace   = hRawTrace;
+    handles.hRawTrace_2 = hRawTrace_2;
+    handles.hTF         = hTF;
 
     drawnow  % This drawnow updates the figure 
 
@@ -86,6 +90,7 @@ function openday_17
     
     % defining default variables for the starttime
     stcount = 1;
+    blcount = 1;
     EXPcount = 1;
 %     btcount = 1;
     dataTemp  = [];
@@ -103,6 +108,8 @@ function openday_17
     AlphaChans = [1 2 3 4 5];  % The chaneels from which the data is extracted
     AlphaMin = get(hAlphaMin,'String'); % Right now unused
     
+    
+    
     BDstart = 1;
     EXPstart = (calibrationDurationS + sampleDurationS); % which is the 11th second from which to start from 
     EXPcount = 1;
@@ -118,8 +125,8 @@ function openday_17
     % Initialization for the soundtone feedback
     smoothKernel = repmat(1/10,1,5);
     epochsToAvg = length(smoothKernel);  
-    alphaLowFreq = 8;
-    alphaHighFreq = 13;
+%     alphaLowFreq = 8;
+%     alphaHighFreq = 13;
     Fsound = 44100;
     % need a high enough value so that alpha power below baseline can be played
     Fc = 500; 
@@ -129,7 +136,9 @@ function openday_17
     [cfg,sock] = rda_open;               % rda_open would pass the sokect information
     hdr = rda_header(cfg,sock);          % rda_header would pass the header details
     
-    
+    % Inserting the relaxation and sustainance quoteient
+    analysisRange = 11:40;
+    rawstpower  = [];
     
     
     while 1
@@ -142,7 +151,9 @@ function openday_17
     %     Get the data and get the psd
     %     also, but dont plot
     
-    [raw, SQN] = rda_message(sock,hdr);    % reading rda message
+        [raw, SQN] =     rda_message(sock,hdr);    % reading rda message
+        alphaLowFreq =   str2num(get(hAlphaMin,'string'));
+        alphaHighFreq =  str2num(get(hAlphaMax,'string'));
         
         
         if state == 0 % Idle state
@@ -152,6 +163,7 @@ function openday_17
             % get the time axis and plot one second of the data
             if stcount==2
                 cla(hRawTrace);
+                cla(hRawTrace_2);
                 cla(hTF);
             end
             stcount = 1;
@@ -172,6 +184,7 @@ function openday_17
                 timeTemp = [];
                 timeStartS=0;
                 cla(hRawTrace);
+                cla(hRawTrace_2);
                 cla(hTF);
                 powerTemp = zeros(51,fullDisplayDurationS);
             end   
@@ -184,12 +197,20 @@ function openday_17
             powerTemp = zeros(51,fullDisplayDurationS);
             stcount = stcount+1;
             cla(hRawTrace);
+            cla(hRawTrace_2);
             cla(hTF);
 %             rda_close(sock); 
 %             powerTemp = zeros(51,fullDisplayDurationS);
     %         pause(1);
 
         elseif state == 3 % Calibrate
+            if blcount==2
+                cla(hRawTrace);
+                cla(hRawTrace_2);
+                cla(hTF);
+            end
+            blcount = 1;
+                        
             if timeStartS < calibrationDurationS
                 % Display PSD and T-F plot as before
                 % Save PSD data in a larger array
@@ -232,8 +253,9 @@ function openday_17
 
                 blDataTemp = zeros(5,Fs*calibrationDurationS);
                 blPowerTemp = zeros(51,calibrationDurationS);
-                cla(hRawTrace);
-                cla(hTF);
+                blcount = blcount+1;
+%                 cla(hRawTrace);   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%55
+%                 cla(hTF);
                 save('BfBlData','blData','rawBlPower'); % in future include specific file name
                 state = 0;
             end
@@ -243,6 +265,7 @@ function openday_17
                 % Display PSD and T-F plot as before Save PSD data in a
                 % larger array compute alpha power
 %                 EXPcount = EXPcount+1;
+      
                 if (EXPcount==1)
                     % Getting current loop data: PN: teh power data is
                     % already in log format
@@ -250,6 +273,7 @@ function openday_17
                     X = raw.data; 
                     freq = raw.freq;
                     power = raw.meanPower;
+                    rawstpower = power;
                     logPower = conv2Log(power);
                     ch_stPower = logPower - logMeanBLPower;
                     
@@ -308,6 +332,7 @@ function openday_17
                     % getting and plotting powerdata
                     % here in each loop the power dat is collected 
                     exp_power = raw.meanPower;
+                    rawstpower = [rawstpower exp_power];
                     ch_power = conv2Log(exp_power)- logMeanBLPower; % being conver
                     EXPpowerTem(:,EXPstart) = ch_power;
                     ch_meanRawPower = EXPpowerTem;
@@ -339,7 +364,22 @@ function openday_17
                     CombExpPowerData = EXPpowerTem;
                     EXPdataTemp = zeros(5,Fs*(calibrationDurationS+runtimeDurationS)); % returned back to the initial dataterm
                     EXPpowerTem = zeros(51,(calibrationDurationS+runtimeDurationS));  % returned back to initial powerterm
-                                   
+                    
+                    %% Inserting the relaxation and sustainace quotient
+                    
+                    blPowerArray = mean(rawBlPower(alphaLowFreq:alphaHighFreq,3:10),2);
+                    stPowerArray = mean(rawstpower(alphaLowFreq:alphaHighFreq,analysisRange),2);
+                    changeArray = stPowerArray/mean(blPowerArray) - 1;
+                    quot = 100*mean(changeArray);
+                    fluct = std(stPowerArray)/mean(stPowerArray);
+                    susqut = (int64(100*(1/fluct)));
+                    % show a message box
+                    msgbox(['Your relaxation quotient is ' num2str(quot) ' % and your sustenance quotient is ' num2str(susqut)], 'EEG Demo', 'help');
+%                     set(h,'Position',[160 300 700 80]);
+%                     ah = get( h, 'CurrentAxes' );
+%                     ch = get( ah, 'Children' );
+%                     set( ch, 'FontSize', 20 );
+%                     
                     save('BFExpData','CombExpRawData','CombExpPowerData');              % save the data 
                     state = 0;                                                          % returing to the default state                       
 
@@ -348,6 +388,7 @@ function openday_17
                 EXPcount = EXPcount+1;       
         elseif state == 5 % Exit the Experiment
             rda_close(sock);
+             save 'alphacontrol.mat';
             clear all;
             break
         end
