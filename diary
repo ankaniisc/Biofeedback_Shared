@@ -1,0 +1,989 @@
+help diary
+ <strong>diary</strong> Save text of MATLAB session.
+    <strong>diary</strong> FILENAME causes a copy of all subsequent command window input
+    and most of the resulting command window output to be appended to the
+    named file.  If no file is specified, the file 'diary' is used.
+ 
+    <strong>diary</strong> OFF suspends it. 
+    <strong>diary</strong> ON turns it back on.
+    <strong>diary</strong>, by itself, toggles the diary state.
+ 
+    Use the functional form of <strong>diary</strong>, such as <strong>diary</strong>('file'),
+    when the file name is stored in a string.
+ 
+    See also <a href="matlab:help save">save</a>.
+
+    <a href="matlab:doc diary">Reference page for diary</a>
+
+A = magic(4)
+
+A =
+
+    16     2     3    13
+     5    11    10     8
+     9     7     6    12
+     4    14    15     1
+
+idx = sub2ind(size(A),[2 3 4], [1 2 4])
+
+idx =
+
+     2     7    16
+
+A(idx)
+
+ans =
+
+     5     7     1
+
+help sub2ind
+ <strong>sub2ind</strong> Linear index from multiple subscripts.
+    <strong>sub2ind</strong> is used to determine the equivalent single index
+    corresponding to a given set of subscript values.
+ 
+    IND = <strong>sub2ind</strong>(SIZ,I,J) returns the linear index equivalent to the
+    row and column subscripts in the arrays I and J for a matrix of
+    size SIZ. 
+ 
+    IND = <strong>sub2ind</strong>(SIZ,I1,I2,...,IN) returns the linear index
+    equivalent to the N subscripts in the arrays I1,I2,...,IN for an
+    array of size SIZ.
+ 
+    I1,I2,...,IN must have the same size, and IND will have the same size
+    as I1,I2,...,IN. For an array A, if IND = <strong>sub2ind</strong>(SIZE(A),I1,...,IN)),
+    then A(IND(k))=A(I1(k),...,IN(k)) for all k.
+ 
+    Class support for inputs I,J: 
+       float: double, single
+       integer: uint8, int8, uint16, int16, uint32, int32, uint64, int64
+ 
+    See also <a href="matlab:help ind2sub">ind2sub</a>.
+
+    <a href="matlab:doc sub2ind">Reference page for sub2ind</a>
+    <a href="matlab:matlab.internal.language.introspective.overloads.displayOverloads('sub2ind')">Other functions named sub2ind</a>
+
+A(find(A > 5))
+
+ans =
+
+    16
+     9
+    11
+     7
+    14
+    10
+     6
+    15
+    13
+     8
+    12
+
+find(A > 5)
+
+ans =
+
+     1
+     3
+     6
+     7
+     8
+    10
+    11
+    12
+    13
+    14
+    15
+
+help find
+ <strong>find</strong>   Find indices of nonzero elements.
+    I = <strong>find</strong>(X) returns the linear indices corresponding to 
+    the nonzero entries of the array X.  X may be a logical expression. 
+    Use IND2SUB(SIZE(X),I) to calculate multiple subscripts from 
+    the linear indices I.
+  
+    I = <strong>find</strong>(X,K) returns at most the first K indices corresponding to 
+    the nonzero entries of the array X.  K must be a positive integer, 
+    but can be of any numeric type.
+ 
+    I = <strong>find</strong>(X,K,'first') is the same as I = <strong>find</strong>(X,K).
+ 
+    I = <strong>find</strong>(X,K,'last') returns at most the last K indices corresponding 
+    to the nonzero entries of the array X.
+ 
+    [I,J] = <strong>find</strong>(X,...) returns the row and column indices instead of
+    linear indices into X. This syntax is especially useful when working
+    with sparse matrices.  If X is an N-dimensional array where N > 2, then
+    J is a linear index over the N-1 trailing dimensions of X.
+ 
+    [I,J,V] = <strong>find</strong>(X,...) also returns a vector V containing the values
+    that correspond to the row and column indices I and J.
+ 
+    Example:
+       A = magic(3)
+       find(A > 5)
+ 
+    finds the linear indices of the 4 entries of the matrix A that are
+    greater than 5.
+ 
+       [rows,cols,vals] = find(speye(5))
+ 
+    finds the row and column indices and nonzero values of the 5-by-5
+    sparse identity matrix.
+ 
+    See also <a href="matlab:help sparse">sparse</a>, <a href="matlab:help ind2sub">ind2sub</a>, <a href="matlab:help relop">relop</a>, <a href="matlab:help nonzeros">nonzeros</a>.
+
+    <a href="matlab:doc find">Reference page for find</a>
+    <a href="matlab:matlab.internal.language.introspective.overloads.displayOverloads('find')">Other functions named find</a>
+
+A>5
+
+ans =
+
+     1     0     0     1
+     0     1     1     1
+     1     1     1     1
+     0     1     1     0
+
+A(A>5)
+
+ans =
+
+    16
+     9
+    11
+     7
+    14
+    10
+     6
+    15
+    13
+     8
+    12
+
+help filter2
+ <strong>filter2</strong> Two-dimensional digital filter.
+    Y = <strong>filter2</strong>(B,X) filters the data in X with the 2-D FIR
+    filter in the matrix B.  The result, Y, is computed 
+    using 2-D correlation and is the same size as X. 
+ 
+    Y = <strong>filter2</strong>(B,X,SHAPE) returns Y computed via 2-D
+    correlation with size specified by SHAPE:
+      'same'  - (default) returns the central part of the 
+                correlation that is the same size as X.
+      'valid' - returns only those parts of the correlation
+                that are computed without the zero-padded
+                edges, size(Y) < size(X).
+      'full'  - returns the full 2-D correlation, 
+                size(Y) > size(X).
+ 
+    <strong>filter2</strong> uses CONV2 to do most of the work.  2-D correlation
+    is related to 2-D convolution by a 180 degree rotation of the
+    filter matrix.
+ 
+    Class support for inputs B,X:
+       float: double, single
+ 
+    See also <a href="matlab:help filter">filter</a>, <a href="matlab:help conv2">conv2</a>.
+
+    <a href="matlab:doc filter2">Reference page for filter2</a>
+    <a href="matlab:matlab.internal.language.introspective.overloads.displayOverloads('filter2')">Other functions named filter2</a>
+
+clc
+[Y,I] = max(A, [], 2);
+A
+
+A =
+
+    16     2     3    13
+     5    11    10     8
+     9     7     6    12
+     4    14    15     1
+
+max(A, [], 2)
+
+ans =
+
+    16
+    11
+    12
+    15
+
+max(A, 2)
+
+ans =
+
+    16     2     3    13
+     5    11    10     8
+     9     7     6    12
+     4    14    15     2
+
+max(A)
+
+ans =
+
+    16    14    15    13
+
+max(A, 2)
+
+ans =
+
+    16     2     3    13
+     5    11    10     8
+     9     7     6    12
+     4    14    15     2
+
+max(A, [], 1)
+
+ans =
+
+    16    14    15    13
+
+hell max
+{Undefined function or variable 'hell'.
+} 
+help max
+ <strong>max</strong>    Largest component.
+    For vectors, <strong>max</strong>(X) is the largest element in X. For matrices,
+    <strong>max</strong>(X) is a row vector containing the maximum element from each
+    column. For N-D arrays, <strong>max</strong>(X) operates along the first
+    non-singleton dimension.
+ 
+    [Y,I] = <strong>max</strong>(X) returns the indices of the maximum values in vector I.
+    If the values along the first non-singleton dimension contain more
+    than one maximal element, the index of the first one is returned.
+ 
+    <strong>max</strong>(X,Y) returns an array the same size as X and Y with the
+    largest elements taken from X or Y. Either one can be a scalar.
+ 
+    [Y,I] = <strong>max</strong>(X,[],DIM) operates along the dimension DIM. 
+ 
+    When X is complex, the maximum is computed using the magnitude
+    <strong>max</strong>(ABS(X)). In the case of equal magnitude elements, then the phase
+    angle <strong>max</strong>(ANGLE(X)) is used.
+ 
+    <strong>max</strong>(..., NANFLAG) specifies how NaN (Not-A-Number) values are treated.
+    NANFLAG can be:
+    'omitnan'    - Ignores all NaN values and returns the maximum of the 
+                   non-NaN elements.  If all elements are NaN, then the
+                   first one is returned.
+    'includenan' - Returns NaN if there is any NaN value.  The index points
+                   to the first NaN element.
+    Default is 'omitnan'.
+ 
+    Example: If X = [2 8 4; 7 3 9] then 
+                max(X,[],1) is [7 8 9],
+                max(X,[],2) is [8; 9] and 
+                max(X,5)    is [5 8 5; 7 5 9].
+ 
+    See also <a href="matlab:help min">min</a>, <a href="matlab:help cummax">cummax</a>, <a href="matlab:help median">median</a>, <a href="matlab:help mean">mean</a>, <a href="matlab:help sort">sort</a>.
+
+    <a href="matlab:doc max">Reference page for max</a>
+    <a href="matlab:matlab.internal.language.introspective.overloads.displayOverloads('max')">Other functions named max</a>
+
+[Y,I] = max(A, [], 2);
+B = zeros(size(A));
+help sub2ind
+ <strong>sub2ind</strong> Linear index from multiple subscripts.
+    <strong>sub2ind</strong> is used to determine the equivalent single index
+    corresponding to a given set of subscript values.
+ 
+    IND = <strong>sub2ind</strong>(SIZ,I,J) returns the linear index equivalent to the
+    row and column subscripts in the arrays I and J for a matrix of
+    size SIZ. 
+ 
+    IND = <strong>sub2ind</strong>(SIZ,I1,I2,...,IN) returns the linear index
+    equivalent to the N subscripts in the arrays I1,I2,...,IN for an
+    array of size SIZ.
+ 
+    I1,I2,...,IN must have the same size, and IND will have the same size
+    as I1,I2,...,IN. For an array A, if IND = <strong>sub2ind</strong>(SIZE(A),I1,...,IN)),
+    then A(IND(k))=A(I1(k),...,IN(k)) for all k.
+ 
+    Class support for inputs I,J: 
+       float: double, single
+       integer: uint8, int8, uint16, int16, uint32, int32, uint64, int64
+ 
+    See also <a href="matlab:help ind2sub">ind2sub</a>.
+
+    <a href="matlab:doc sub2ind">Reference page for sub2ind</a>
+    <a href="matlab:matlab.internal.language.introspective.overloads.displayOverloads('sub2ind')">Other functions named sub2ind</a>
+
+doc sub2ind
+ B(sub2ind(size(A), 1:length(I), I')) = Y;
+B(sub2ind(size(A), 1:length(I), I))= Y
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sub2ind', 'C:\Program Files\MATLAB\R2015b\toolbox\matlab\elmat\sub2ind.m', 51)" style="font-weight:bold">sub2ind</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2015b\toolbox\matlab\elmat\sub2ind.m',51,0)">line 51</a>)
+The subscript vectors must all be of the same size.
+} 
+ 1:length(I)
+
+ans =
+
+     1     2     3     4
+
+ I
+
+I =
+
+     1
+     2
+     4
+     3
+
+sub2ind(size(A), 1:length(I), I)
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('sub2ind', 'C:\Program Files\MATLAB\R2015b\toolbox\matlab\elmat\sub2ind.m', 51)" style="font-weight:bold">sub2ind</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2015b\toolbox\matlab\elmat\sub2ind.m',51,0)">line 51</a>)
+The subscript vectors must all be of the same size.
+} 
+sub2ind(size(A), 1:length(I), I')
+
+ans =
+
+     1     6    15    12
+
+m = 10
+
+m =
+
+    10
+
+n = 20
+
+n =
+
+    20
+
+p = 1:m
+
+p =
+
+     1     2     3     4     5     6     7     8     9    10
+
+q = 1:n
+
+q =
+
+  Columns 1 through 13
+
+     1     2     3     4     5     6     7     8     9    10    11    12    13
+
+  Columns 14 through 20
+
+    14    15    16    17    18    19    20
+
+ [P, Q] = ndgrid(p, q);
+help ndgrid
+ <strong>ndgrid</strong> Rectangular grid in N-D space
+    [X1,X2,X3,...] = <strong>ndgrid</strong>(x1gv,x2gv,x3gv,...) replicates the grid vectors 
+    x1gv,x2gv,x3gv,...  to produce the coordinates of a rectangular grid 
+    (X1,X2,X3,...).  The i-th dimension of the output array Xi are copies
+    of elements of the grid vector xigv. For example, the grid vector x1gv 
+    forms the rows of X1, the grid vector x2gv forms the columns of X2 etc. 
+ 
+    [X1,X2,...] = <strong>ndgrid</strong>(xgv) is equivalent to [X1,X2,...] = <strong>ndgrid</strong>(xgv,xgv,...).
+    The dimension of the output is determined by the number of output
+    arguments. X1 = <strong>ndgrid</strong>(xgv) degenerates to produce a 1-D grid represented
+    by a 1-D array.
+ 
+    The coordinate arrays are typically used for the evaluation of functions 
+    of several variables and for surface and volumetric plots.
+ 
+    <strong>ndgrid</strong> and MESHGRID are similar, though <strong>ndgrid</strong> supports 1-D to N-D while 
+    MESHGRID is restricted to 2-D and 3-D. In 2-D and 3-D the coordinates 
+    output by each function are the same, the difference is the shape of the 
+    output arrays. For grid vectors x1gv, x2gv and x3gv of length M, N and P 
+    respectively, <strong>ndgrid</strong>(x1gv, x2gv) will output arrays of size M-by-N while 
+    MESHGRID(x1gv, x2gv) outputs arrays of size N-by-M. Similarly,
+    <strong>ndgrid</strong>(x1gv, x2gv, x3gv) will output arrays of size M-by-N-by-P while 
+    MESHGRID(x1gv, x2gv, x3gv) outputs arrays of size N-by-M-by-P.
+ 
+    Example: Evaluate the function  x2*exp(-x1^2-x2^2-x^3) over the
+             range  -2 < x1 < 2,  -2 < x2 < 2, -2 < x3 < 2,
+ 
+        [x1,x2,x3] = ndgrid(-2:.2:2, -2:.25:2, -2:.16:2);
+        z = x2 .* exp(-x1.^2 - x2.^2 - x3.^2);
+        slice(x2,x1,x3,z,[-1.2 .8 2],2,[-2 -.2])
+ 
+ 
+    Class support for inputs x1gv,x2gv,x3gv,...
+       float: double, single
+       integer: uint8, int8, uint16, int16, uint32, int32, uint64, int64
+ 
+    See also <a href="matlab:help meshgrid">meshgrid</a>, <a href="matlab:help slice">slice</a>, <a href="matlab:help interpn">interpn</a>.
+
+    <a href="matlab:matlab.internal.language.introspective.overloads.displayOverloads('ndgrid')">Other functions named ndgrid</a>
+
+ndgrid
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('ndgrid', 'C:\Program Files\MATLAB\R2015b\toolbox\matlab\elmat\ndgrid.m', 43)" style="font-weight:bold">ndgrid</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2015b\toolbox\matlab\elmat\ndgrid.m',43,0)">line 43</a>)
+Not enough input arguments.
+} 
+clc'
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('clc')" style="font-weight:bold">clc</a>
+Too many output arguments.
+} 
+close all
+clear all
+clc
+a = 10
+
+a =
+
+    10
+
+' a is a variale'
+
+ans =
+
+ a is a variale
+
+a = 10
+
+a =
+
+    10
+
+a = 20
+
+a =
+
+    20
+
+a = 10
+
+a =
+
+    10
+
+a = 10.4974974974
+
+a =
+
+   10.4975
+
+single(a_
+ single(a_
+          
+{Error: Expression or statement is incorrect--possibly unbalanced (, {,
+or [.
+} 
+single(a)
+
+ans =
+
+   10.4975
+
+a = single(a)
+
+a =
+
+   10.4975
+
+format long
+a 
+
+a =
+
+  10.4974976
+
+format single
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('format')" style="font-weight:bold">format</a>
+Unknown command option.
+} 
+1.000000001
+
+ans =
+
+   1.000000001000000
+
+single(1.000000001000000)
+
+ans =
+
+     1
+
+single(1.000000001000000)
+
+ans =
+
+     1
+
+single(1.000000001000001)
+
+ans =
+
+     1
+
+a = 1.000000001000000111
+
+a =
+
+   1.000000001000000
+
+single(a)
+
+ans =
+
+     1
+
+a = 1.00000001
+
+a =
+
+   1.000000010000000
+
+single(a)
+
+ans =
+
+     1
+
+a = 1.0000001
+
+a =
+
+   1.000000100000000
+
+single(a)
+
+ans =
+
+   1.0000001
+
+a = 1.00000001
+
+a =
+
+   1.000000010000000
+
+single(a)
+
+ans =
+
+     1
+
+a = 1.0000001
+
+a =
+
+   1.000000100000000
+
+single(a)
+
+ans =
+
+   1.0000001
+
+a = 1.0000001863864386484684684648
+
+a =
+
+   1.000000186386439
+
+format long
+a = 1.0000001863864386484684684648
+
+a =
+
+   1.000000186386439
+
+3786348648484686486484684686486486486484686486486484684684
+
+ans =
+
+     3.786348648484686e+57
+
+formar long
+{Undefined function or variable 'formar'.
+} 
+format long
+3786348648484686486484684686486486486484686486486484684684
+
+ans =
+
+     3.786348648484686e+57
+
+a = ans
+
+a =
+
+     3.786348648484686e+57
+
+numel(num2str(a))
+
+ans =
+
+    21
+
+7448758369202064302740208497058296529327297297253792534545921
+
+ans =
+
+     7.448758369202065e+60
+
+numel(num2str(ans))
+
+ans =
+
+    21
+
+fomrat uint64
+{Undefined function or variable 'fomrat'.
+} 
+format uint64
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('format')" style="font-weight:bold">format</a>
+Unknown command option.
+} 
+uint64(ans)
+
+ans =
+
+                   21
+
+int64(ans)
+
+ans =
+
+                   21
+
+int64(8479479840973973497494794794793203979348202904749703829)
+
+ans =
+
+  9223372036854775807
+
+clc
+6877957917293797497329734
+
+ans =
+
+     6.877957917293798e+24
+
+a = 89832479743097430970923709370
+
+a =
+
+     8.983247974309742e+28
+
+b = a
+
+b =
+
+     8.983247974309742e+28
+
+int64(b)
+
+ans =
+
+  9223372036854775807
+
+clear
+clear all
+clc
+subject = [];
+clear all
+clc
+
+clc
+temp = [];
+temp.monday = 67
+
+temp = 
+
+    monday: 67
+
+temp.tuesday = 76
+
+temp = 
+
+     monday: 67
+    tuesday: 76
+
+temp.wednesday = 90
+
+temp = 
+
+       monday: 67
+      tuesday: 76
+    wednesday: 90
+
+temp.thursday = 36
+
+temp = 
+
+       monday: 67
+      tuesday: 76
+    wednesday: 90
+     thursday: 36
+
+temp.friday = 10
+
+temp = 
+
+       monday: 67
+      tuesday: 76
+    wednesday: 90
+     thursday: 36
+       friday: 10
+
+temp
+
+temp = 
+
+       monday: 67
+      tuesday: 76
+    wednesday: 90
+     thursday: 36
+       friday: 10
+
+clc
+temp.monday
+
+ans =
+
+    67
+
+temp.tuesday 
+
+ans =
+
+    76
+
+single(temp)
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('single')" style="font-weight:bold">single</a>
+Conversion to single from struct is not possible.
+} 
+single(temp.monday)
+
+ans =
+
+    67
+
+clear alll
+clc
+shoppinglist = [];
+shoppinglist.clothes = 'pajama'
+
+shoppinglist = 
+
+    clothes: 'pajama'
+
+shoppinglist.clothes = pajama
+{Undefined function or variable 'pajama'.
+} 
+shoppinglist.clothes = 'pajama'
+
+shoppinglist = 
+
+    clothes: 'pajama'
+
+shoppinglist.clothes.one = 'pajama'
+{Field assignment to a non-structure array object.
+} 
+clothes.one = 'pajama'
+
+clothes = 
+
+    one: 'pajama'
+
+clothes.two = 'kurti'
+
+clothes = 
+
+    one: 'pajama'
+    two: 'kurti'
+
+shoppinglist.clothes = clothes
+
+shoppinglist = 
+
+    clothes: [1x1 struct]
+
+a = 1.39039
+
+a =
+
+   1.390390000000000
+
+float(a)
+{Error using <a href="matlab:matlab.internal.language.introspective.errorDocCallback('float', 'C:\Program Files\MATLAB\R2015b\toolbox\simulink\fixedandfloat\float.m', 46)" style="font-weight:bold">float</a> (<a href="matlab: opentoline('C:\Program Files\MATLAB\R2015b\toolbox\simulink\fixedandfloat\float.m',46,0)">line 46</a>)
+The input argument to float was not a supported type. The only
+recognized strings are 'single' and 'double'. The input type was
+'double'.
+} 
+clc
+a = []
+
+a =
+
+     []
+
+a = [173739]
+
+a =
+
+      173739
+
+a = [173739,38738]
+
+a =
+
+      173739       38738
+
+a = [173739,38738,373973]
+
+a =
+
+      173739       38738      373973
+
+a = {33, 'ankan',3773}
+
+a = 
+
+    [33]    'ankan'    [3773]
+
+clc
+a = {}
+
+a = 
+
+     {}
+
+s = struct
+
+s = 
+
+<a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with no fields.
+
+s.1 = 12
+ s.1 = 12
+  
+{Error: Unexpected MATLAB expression.
+} 
+s.name = 10
+
+s = 
+
+    name: 10
+
+clc
+s = struct
+
+s = 
+
+<a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with no fields.
+
+bandana = struct
+
+bandana = 
+
+<a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with no fields.
+
+bandana.age = 23
+
+bandana = 
+
+    age: 23
+
+bandana.dept = 'neuroscience'
+
+bandana = 
+
+     age: 23
+    dept: 'neuroscience'
+
+bandana.surname = 'pandia';
+bandana.surname = 'pandia'
+
+bandana = 
+
+        age: 23
+       dept: 'neuroscience'
+    surname: 'pandia'
+
+bandana.surname = 'pandia';
+bandana.surname = 'pandia'
+
+bandana = 
+
+        age: 23
+       dept: 'neuroscience'
+    surname: 'pandia'
+
+bandana.surname = 'pandia';
+bandana.surname = 'pandia'
+
+bandana = 
+
+        age: 23
+       dept: 'neuroscience'
+    surname: 'pandia'
+
+clc
+clothes.one = 'ban';
+clothes.two = 'frock'
+
+clothes = 
+
+    one: 'ban'
+    two: 'frock'
+
+clothes
+
+clothes = 
+
+    one: 'ban'
+    two: 'frock'
+
+utensils.one = 'pressure cooker';
+utensils.two = 'rice cooker';
+list = strcut
+{Undefined function or variable 'strcut'.
+} 
+list = struct
+
+list = 
+
+<a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with no fields.
+
+utensils
+
+utensils = 
+
+    one: 'pressure cooker'
+    two: 'rice cooker'
+
+clothe
+{Undefined function or variable 'clothe'.
+} 
+clothes
+
+clothes = 
+
+    one: 'ban'
+    two: 'frock'
+
+list
+
+list = 
+
+<a href="matlab:helpPopup struct" style="font-weight:bold">struct</a> with no fields.
+
+list.utensils = utensils
+
+list = 
+
+    utensils: [1x1 struct]
+
+list.clothes = clothes
+
+list = 
+
+    utensils: [1x1 struct]
+     clothes: [1x1 struct]
+
+list
+
+list = 
+
+    utensils: [1x1 struct]
+     clothes: [1x1 struct]
+
+exit
